@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to ggplot2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ijeamaka Anyene" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to ggplot2
+## Data Visualization Week 2020
+### Ijeamaka Anyene
+
+---
+
+## What is ggplot2?
+
+
+
+
+
+
+.pull-left[
+&lt;br&gt;&lt;br&gt;An R package that is part of the tidyverse
+&lt;br&gt;&lt;br&gt;Specifically designed for the creation of plots 
+&lt;br&gt;&lt;br&gt;Easy to iterate and build on
+]
+
+.pull-right[
+&lt;img src="supplemental_graphics/ggplot2.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+
+## Quick FYI!
+
+`ggplot2` is a huge package with a ton of functionality to create plots, this presentation will only skim the surface.   
+&lt;br&gt;&lt;br&gt;
+This will be more of a "watch and learn" type of presentation versus a "follow along"  
+
+&lt;br&gt;But all the code to generate plots will be visible and thus available to you! 
+
+
+---
+## Data: {palmerpenguins} R package
+
+Contains size measurements for three penguin species observed on three islands in the Palmer Archipelago, Antarctica.
+
+
+|species | body_mass_g| bill_length_mm|sex    |
+|:-------|-----------:|--------------:|:------|
+|Adelie  |        3750|           39.1|male   |
+|Adelie  |        3800|           39.5|female |
+|Adelie  |        3250|           40.3|female |
+|Adelie  |        3450|           36.7|female |
+|Adelie  |        3650|           39.3|male   |
+|Adelie  |        3625|           38.9|female |
+
+
+---
+class: center, middle
+## So.. what's the gg in ggplot2?
+
+&lt;br&gt;&lt;br&gt;
+#ggplot2 is the **g**rammar of **g**raphics **plot** ... 2
+
+
+---
+## Grammar of Graphics
+
+&gt;  "Grammar of graphics is a tool that enables us to concisely describe the components of a graphic"
+    
+&lt;br&gt;&lt;br&gt;
+**The Grammar of Graphics by Leland Wilkinson**
+* Proposed an idea of building up a graphic from multiple "layers of data" 
+
+&lt;br&gt;&lt;br&gt;    
+**A Layered Grammar of Graphics by Hadley Wickham**  
+* "Layers" implemented in ggplot2 (with some tweaks and expansion on the concept)
+* Thinking behind the implementation of the concept in `ggplot2()`
+
+
+---
+## Grammar of Graphics
+
+&lt;img src="supplemental_graphics/layered_graphics.png" width="80%" style="display: block; margin: auto;" /&gt;
+---
+## Grammar of Graphics - Essentials
+
+
+.pull-left[
+**Data**
+
+```r
+ggplot( )
+```
+]
+
+.pull-right[
+&lt;br&gt; 
+The source of information for your visualization.
+&lt;br&gt;&lt;br&gt;`ggplot()` requires your data to be 'tidy'
+* Every variable has a column
+* Every observation has a row
+]
+
+---
+## Grammar of Graphics - Essentials
+
+
+.pull-left[
+**Data**
+
+```r
+ggplot(data = penguins)
+
+penguins %&gt;%
+  ggplot()
+```
+]
+
+.pull-right[
+&lt;br&gt; 
+The source of information for your visualization.
+&lt;br&gt;&lt;br&gt;`ggplot()` requires your data to be 'tidy'
+* Every variable has a column
+* Every observation has a row
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+
+```r
+ggplot(data = penguins)
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-out-1.png)&lt;!-- --&gt;
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+**Mapping**
+
+```r
+aes(x = , 
+    y = )
+```
+]
+
+.pull-right[
+&lt;br&gt;
+Crosswalk between variables in the dataset and how they are visualized in the plot
+* body mass g -&gt; x
+* bill length mm -&gt; y
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+**Mapping**
+
+```r
+aes(x = body_mass_g, 
+    y = bill_length_mm)
+```
+]
+
+.pull-right[
+&lt;br&gt;
+Crosswalk between variables in the dataset and how they are visualized in the plot
+* body mass g -&gt; x
+* bill length mm -&gt; y
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+**Geometric Object**
+
+```r
+geom_*()
+```
+]
+
+.pull-right[
+&lt;br&gt;
+Controls the type of plot you create
+* geom_point() = scatter plot
+* geom_line() = line plot
+* geom_col() or geom_bar() = bar graph
+
+...and more!!!
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+**Geometric Object**
+
+```r
+geom_point()
+```
+]
+
+.pull-right[
+&lt;br&gt;
+Controls the type of plot you create
+* geom_point() = scatter plot
+* geom_line() = line plot
+* geom_col() or geom_bar() = bar graph
+
+...and more!!!
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+**Mapping + Geometric Object**
+
+```r
+# Method 1 
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm))
+       
+# Method 2
+ggplot(data = penguins) +
+  geom_point(aes(x = body_mass_g, 
+           y = bill_length_mm))
+
+# Method 3
+ggplot() +
+  geom_point(data = penguins,
+         aes(x = body_mass_g, 
+           y = bill_length_mm))
+```
+]
+
+.pull-right[
+&lt;br&gt;
+Method 1: Best when using one data set and one aesthetic mapping
+&lt;br&gt;&lt;br&gt;
+Method 2: Best when using one data set, and multiple geoms + aesthetic mappings
+&lt;br&gt;&lt;br&gt;
+Method 3: Best when using multiple data sets, and multiple geoms + aesthetic mappings
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+*      aes(x = body_mass_g,
+*          y = bill_length_mm))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-2-out-1.png)&lt;!-- --&gt;
+]
+
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g,
+           y = bill_length_mm)) +
+* geom_point()
+```
+&lt;br&gt;Understands the following aesthetics
+* x
+* y
+* alpha
+* colour
+* fill
+* shape
+* size
+* etc.
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-3-out-1.png)&lt;!-- --&gt;
+]
+
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g,
+           y = bill_length_mm,
+*          colour = sex)) +
+  geom_point()
+```
+&lt;br&gt;&lt;br&gt;Add another dimension to the plot 
+&lt;br&gt;by using `colour = `
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-4-out-1.png)&lt;!-- --&gt;
+]
+
+---
+## Grammar of Graphics - Essentials
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g,
+           y = bill_length_mm)) +
+* geom_point(aes(shape = as.factor(sex)))
+```
+&lt;br&gt;&lt;br&gt;Change the shape of the scatter plot, by using `aes()`
+
+]
+
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-6-out-1.png)&lt;!-- --&gt;
+]
+
+---
+## Grammar of Graphics - Essentials
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g,
+           y = bill_length_mm)) +
+* geom_point(colour = "blue")
+```
+&lt;br&gt;&lt;br&gt;Map an aesthetic to a fixed value, by calling it outside of `aes()`
+
+]
+
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-5-out-1.png)&lt;!-- --&gt;
+]
+
+---
+## Grammar of Graphics - Essentials
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g,
+           y = bill_length_mm)) +
+* geom_point(shape = 21,
+*            colour = "blue",
+*            fill = "red")
+```
+&lt;br&gt;&lt;br&gt;For shapes (or geoms) that have a border you can make the border (colour) and the inside (fill) different colors. 
+
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-7-out-1.png)&lt;!-- --&gt;
+]
+
+---
+## Grammar of Graphics - Essentials
+
+.pull-left[
+
+```r
+*g =
+  ggplot(data = penguins,
+       aes(x = body_mass_g,
+           y = bill_length_mm,
+           colour = sex)) +
+  geom_point()
+
+*g 
+```
+&lt;br&gt;&lt;br&gt; Save your `ggplot` to an object! This object will be used to add additional layers in our graphic
+
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/plot-label-8-out-1.png)&lt;!-- --&gt;
+]
+
+---
+## Grammar of Graphics - Essentials
+
+&lt;br&gt;You can change the labels of the axes, as well as modify the limits of the axes.  
+
+&lt;br&gt;&lt;br&gt;This is done by using:
+* `xlab()` and `ylab()` to change the labels
+* `xlim()` and `ylim()` to change the limits
+
+&lt;br&gt;Note this can also be done by using `labs()` - to be covered later!
+
+---
+## Grammar of Graphics - Essentials
+.pull-left[
+
+```r
+g +
+  xlab("Body Mass (g)") +
+  ylab("Bill Length (mm)")
+```
+&lt;br&gt;Modified labels using `xlab()` and `ylab()`
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+
+---
+## Grammar of Graphics - Essentials
+.pull-left[
+
+```r
+g +
+  xlim(3000, 4000)
+```
+&lt;br&gt; Limiting the x-axis to body mass between 3000 and 4000 g
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 1: Scales
+
+&lt;b&gt;Controls how the data is mapped to the aesthetic&lt;/b&gt;
+
+&lt;br&gt;Two main scale methods:
+* Position Scales -&gt; Affects your axes
+* Color Scales -&gt; Affects your colors/legends
+
+.pull-left[
+&lt;br&gt;
+&lt;b&gt; Position Scales&lt;/b&gt;
+* Change labels
+* Change breaks
+* Modify limits
+* Stat transformations
+]
+
+.pull-right[
+&lt;br&gt;
+&lt;b&gt; Color Scales &lt;/b&gt;
+* Change color mapping
+* Change breaks
+* Modify limits
+]
+
+---
+## Additional Layer 1: Scales
+
+&lt;b&gt;Controls how the data is mapped to the aesthetic&lt;/b&gt;
+
+&lt;br&gt;All scale functions tend to follow a similar formula:  
+`scale` + `_ ` + `&lt;aes&gt;` + `_` + `&lt;type&gt;` + `()`
+
+&lt;br&gt;Where:
+* aes = What variable do you want to change?
+* type = What type of variable?  
+
+---
+## Additional Layer 1: Scales
+
+&lt;b&gt;Controls how the data is mapped to the aesthetic&lt;/b&gt;
+
+&lt;br&gt;All scale functions tend to follow a similar formula:  
+`scale` + `_ ` + `&lt;aes&gt;` + `_` + `&lt;type&gt;` + `()`
+
+.pull-left[
+&lt;br&gt;
+If we wanted to use a different color palette for a continuous variable:
+* aesthetic variable = color
+* type of variable = continuous
+
+`scale_color_continuous()`
+]
+
+.pull-right[
+&lt;br&gt;
+If we wanted to change the limits for the date variable on the x axis:
+* aesthetic variable = x
+* type of variable = date
+
+`scale_x_date()`
+]
+
+---
+## Additional Layer 1: Scales
+
+.pull-left[
+&lt;b&gt; Position scales - change your axes &lt;/b&gt;
+
+```r
+g + 
+  scale_x_continuous(
+    limits = c(3000, 4000))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 1: Scales
+
+.pull-left[
+&lt;b&gt; Position scales - change your axes &lt;/b&gt;
+
+```r
+g + 
+  scale_x_continuous("Body Mass (g)")
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 1: Scales
+
+.pull-left[
+&lt;b&gt; Position scales - change your axes &lt;/b&gt;
+
+```r
+g + 
+  scale_x_continuous(
+    breaks = c(4000, 6000))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 1: Scales
+
+.pull-left[
+&lt;b&gt; Colour scales - change your legends &lt;/b&gt;
+
+```r
+col = c("female" = "#ee6f57", 
+        "male" = "#1f3c88")
+g + 
+  scale_color_manual(
+    values = col)
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+---
+## Additional Layer 1: Scales
+
+.pull-left[
+&lt;b&gt; Colour scales - change your legends&lt;/b&gt;
+
+```r
+col = c("female" = "#ee6f57", 
+        "male" = "#1f3c88")
+g + 
+  scale_color_manual(
+    values = col,
+    labels = c("Female Penguins", 
+               "Male Penguins"))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+---
+## Additional Layer 2: Coordinate systems
+
+Two main uses:
+ + Combine two position aesthetics (x and y) to produce 2D position on plot 
+ + Draw axes and panel backgrounds
+ 
+&lt;br&gt;Commonly Used `coord_*()`: 
+* `coord_flip()` - flips your position aesthetics 
+* `coord_cartesian()` - cartesian plane
+* `coord_polar()` - polar plane
+* and more!
+
+
+---
+## Additional Layer 2: Coordinate systems
+
+.pull-left[
+`coord_flip()` flips your x and y axes
+
+```r
+g + coord_flip()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 2: Coordinate systems
+
+.pull-left[
+`coord_polar()` converts your chart into a circle 
+
+```r
+g + 
+  coord_polar()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 3: Facets 
+
+&lt;br&gt;Generates small multiples that each show a different subset of the data
+
+&lt;br&gt; Alternative to aesthetics for displaying additional categorical/discrete variables
+
+&lt;br&gt;Two `facet_*()` options:
+&lt;br&gt; `facet_grid()` and `facet_wrap()`
+
+---
+## Additional Layer 3: Facets 
+
+.pull-left[
+
+```r
+g + facet_wrap(~species)
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+]
+
+---
+## Additional Layer 3: Facets 
+.pull-left[
+
+```r
+g + facet_grid(row = vars(species),
+               cols = vars(year))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Honorable Mentions: Labs &amp; Themes
+
+`labs()` and `themes()` are not considered "layers" as part of the Grammar of Graphics.
+&lt;br&gt;&lt;br&gt;
+--
+&lt;b&gt; Why? &lt;/b&gt;
+
+&lt;br&gt;They only control non-data elements of the plot.
+
+---
+## Honorable Mentions: Labs
+
+.pull-left[
+Labs allow you to change the labels of the plot 
+
+```r
+g +
+  labs(x = "Body Mass (g)",
+       y = "Bill Length (mm)",
+       title = "Palmer Penguins",
+       subtitle = "Bill Length (mm) vs. Body Mass (g)",
+       caption = "Created by Ijeamaka")
+```
+&lt;br&gt; This is similar to `xlab()` and `ylab()` but contained in one function
+]
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+]
+
+---
+## Honorable Mentions: Labs
+
+.pull-left[
+
+```r
+g +
+  labs(x = NULL,
+       y = NULL,
+       title = "Palmer Penguins",
+       subtitle = "Bill Length (mm) vs. Body Mass (g)",
+       caption = "Created by Ijeamaka")
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+]
+
+
+
+---
+## Honorable Mentions: Themes
+
+.pull-left[
+Control the plot appearance/decorations
+
+
+```r
+g + theme_minimal()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+]
+---
+## Honorable Mentions: Themes
+
+.pull-left[
+Control the plot appearance/decorations
+
+
+```r
+g + theme_classic()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+]
+
+---
+## Honorable Mentions: Themes
+
+.pull-left[
+You can customize your own `theme()`
+
+
+```r
+g + 
+  facet_grid(row = vars(species),
+               cols = vars(year)) +
+  theme(
+    plot.background = element_blank(),
+    panel.background = 
+      element_rect(fill = "white"),
+    panel.grid = 
+      element_line(colour = "grey"),
+    strip.background = 
+      element_rect(fill = "black"),
+    strip.text = 
+      element_text(face = "bold",
+                  colour = "white",
+                  size = 13))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+
+.pull-left[
+
+```r
+ggplot(data = penguins)
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+.pull-left[
+
+```r
+ggplot(data = penguins,
+*      aes(x = body_mass_g,
+*          y = bill_length_mm,
+*          colour = sex))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm,
+           colour = sex)) +
+* geom_point()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm,
+           colour = sex)) +
+  geom_point() +
+* scale_color_manual(
+*   values = c("#ee6f57","#1f3c88"))
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm,
+           colour = sex)) +
+  geom_point() +
+  scale_color_manual(
+    values = c("#ee6f57", "#1f3c88")) +
+* coord_flip()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm,
+           colour = sex)) +
+  geom_point() +
+  scale_color_manual(
+    values = c("#ee6f57", "#1f3c88")) +
+  coord_flip() +
+* facet_wrap(~species)
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm,
+           colour = sex)) +
+  geom_point() +
+  scale_color_manual(
+    values = c("#ee6f57", "#1f3c88")) +
+  coord_flip() +
+  facet_wrap(~species) +
+* labs(title = "Palmer Penguins")
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Grammar of Graphics Summarized: Lets Build A Plot!
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = body_mass_g, 
+           y = bill_length_mm,
+           colour = sex)) +
+  geom_point() +
+  scale_color_manual(
+    values = c("#ee6f57", "#1f3c88")) +
+  coord_flip() +
+  facet_wrap(~species) +
+  labs(title = "Palmer Penguins") +
+* theme_minimal()
+```
+]
+
+.pull-right[
+![](ggplot_presentation_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
+]
+
+---
+## Save your plot!
+
+.pull-left[
+ggplot has a convenient function that allows you to:
+* save your plot
+* change graphic type
+* define the width and height of the plot
+* and more
+]
+
+.pull-right[
+
+```r
+ggsave(
+  filename = "plot_name.ext",
+  plot = last_plot(), 
+  
+  # Choose one from this list
+  device = c("pdf", "jpeg", 
+             "tiff", "png", "svg"),
+  
+  # Path
+  path = "path/to/folder"
+  
+)
+```
+]
+
+---
+
+## Sources and Resources
+
+ggplot2: elegant graphics for data analysis  
+- WIP 3rd-edition book freely accessible online!
+
+&lt;br&gt; ggplot2.tidyverse.org  
+- Tidyverse reference documentation is A+  
+
+&lt;br&gt; Packages used in presentation
+
+```r
+library(palmerpenguins)
+library(dplyr)
+library(ggplot2)
+```
+
+---
+
+## Waffles says thank you for attending!
+
+.pull-left[
+&lt;img src="supplemental_graphics/IMG-1561.jpg" width="75%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="supplemental_graphics/IMG-2982.jpg" width="75%" style="display: block; margin: auto;" /&gt;
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
